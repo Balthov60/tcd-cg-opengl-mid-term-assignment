@@ -6,7 +6,7 @@
 //
 
 #pragma once
-#include "GLUtils.hpp"
+#include "CGUtils.hpp"
 
 // Macro for indexing vertex buffer
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))

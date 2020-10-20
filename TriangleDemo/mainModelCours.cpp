@@ -14,12 +14,11 @@
 
 // GL includes
 
-#include "GLUtils.hpp"
+#include "CGUtils.hpp"
 
 using namespace std;
 
-// Project includes
-#include "maths_funcs.h"
+
 // Assimp includes
 #include <assimp/cimport.h> // scene importer
 #include <assimp/scene.h> // collects data
@@ -34,7 +33,7 @@ MESH TO LOAD
 // put the mesh in your project directory, or provide a filepath for it here
 #define MESH_NAME "res/models/monkey/monkeyhead_smooth.dae"
 // #define MESH_NAME "res/models/test/Koltuk.obj"
-// #define MESH_NAME "res/models/nanosuit.obj"
+ #define MESH_NAME "res/models/nanosuit.obj"
 
 /*----------------------------------------------------------------------------
 ----------------------------------------------------------------------------*/
@@ -61,12 +60,6 @@ GLfloat rotate_y = 0.0f;
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
 GLuint vao;
-
-
-// GLuint vao;
-
-
-
 
 /*----------------------------------------------------------------------------
 MESH LOADING FUNCTION
@@ -175,36 +168,10 @@ void generateObjectBufferMesh(ShaderProgram shaderProgram) {
     //    glVertexAttribPointer (loc3, 2, GL_FLOAT, GL_FALSE, 0, NULL);
 }
 
-
-/*
- 
- SHADERS
- 
- */
-
-char* readShaderSource(const char* shaderFile) {
-    FILE* fp;
-    fp = fopen(shaderFile, "rb");
-
-    if (fp == NULL) { return NULL; }
-
-    fseek(fp, 0L, SEEK_END);
-    long size = ftell(fp);
-
-    fseek(fp, 0L, SEEK_SET);
-    char* buf = new char[size + 1];
-    fread(buf, 1, size, fp);
-    buf[size] = '\0';
-
-    fclose(fp);
-
-    return buf;
-}
-
 int main( )
 {
     
-    GLFWwindow * window = WindowUtils::GetInstance().createWindow();
+    GLFWwindow * window = CGUtils::GetInstance().initAndGetWindow();
     
     //init function
     ShaderProgram shaderProgram("simpleVertexShader.txt", "simpleFragmentShader.txt");
@@ -212,7 +179,7 @@ int main( )
     shaderProgram.validate();
     
     // Game loop
-    while( !glfwWindowShouldClose( window ) )
+    while(!glfwWindowShouldClose(window))
     {
         /* Idle */
         GLfloat currentFrame = glfwGetTime();
@@ -228,47 +195,48 @@ int main( )
         
         
         /* Event */
-        
         glfwPollEvents();
         
         /* Display */
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClearColor(0.2f, radians(rotate_y / 10), 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
         shaderProgram.use();
 
         // Root of the Hierarchy
-        mat4 view = identity_mat4();
+        mat4 view = identity<mat4>();
         mat4 persp_proj = perspective(45.0f, (float)width / (float)height, 0.1f, 1000.0f);
-        mat4 model = identity_mat4();
-        model = rotate_z_deg(model, rotate_y);
+        mat4 model = identity<mat4>();
+        model = rotate(model, radians(rotate_y), vec3(0, 0, 1));
         view = translate(view, vec3(0.0, 0.0, -10.0f));
 
         // update uniforms
-        shaderProgram.linkMatrixUniformVariable(persp_proj.m, "proj");
-        shaderProgram.linkMatrixUniformVariable(view.m, "view");
-        shaderProgram.linkMatrixUniformVariable(model.m, "model");
+        shaderProgram.linkMatrixUniformVariable(persp_proj, "proj");
+        shaderProgram.linkMatrixUniformVariable(view, "view");
+        shaderProgram.linkMatrixUniformVariable(model, "model");
 
         // Draw
         glDrawArrays(GL_TRIANGLES, 0, mesh_data.mPointCount);
 
         
         // Set up the child matrix
-        mat4 modelChild = identity_mat4();
-        modelChild = rotate_z_deg(modelChild, 180);
-        modelChild = rotate_y_deg(modelChild, rotate_y);
-        modelChild = translate(modelChild, vec3(0.0f, 1.9f, 0.0f));
+        mat4 modelChild = identity<mat4>();
+        modelChild = rotate(modelChild, radians(180.0f), vec3(0, 0, 1));
+        modelChild = rotate(modelChild, radians(rotate_y), vec3(0, 1, 0));
+        modelChild = translate(modelChild, vec3(0.0f, -1.9f, 0.0f));
 
         // Apply the root matrix to the child matrix
         modelChild = model * modelChild;
 
         // Update the appropriate uniform and draw the mesh again
-        shaderProgram.linkMatrixUniformVariable(modelChild.m, "model");
+        shaderProgram.linkMatrixUniformVariable(modelChild, "model");
 
         glDrawArrays(GL_TRIANGLES, 0, mesh_data.mPointCount);
          
         glfwSwapBuffers(window);
     }
-    glfwTerminate( );
+    
+    glfwTerminate();
+    
     return 0;
 }

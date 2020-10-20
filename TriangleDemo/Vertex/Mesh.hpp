@@ -15,7 +15,7 @@
 
 #include <assimp/Importer.hpp>
 
-#include "GLUtils.hpp"
+#include "CGUtils.hpp"
 #include "ShaderProgram.hpp"
 
 using namespace std;

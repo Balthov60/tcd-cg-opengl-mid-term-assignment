@@ -1,4 +1,4 @@
-#include "GLUtils.hpp"
+#include "CGUtils.hpp"
 #include "ShaderProgram.hpp"
 #include "VertexBuffer.hpp"
 #include "VertexArray.hpp"
@@ -130,7 +130,7 @@ int main(int argc, char** argv){
 
         mat4 transformMatrix = generateTransformMatrice();
         pb1.use();
-        pb1.program.linkMatrixUniformVariable(value_ptr(transformMatrix), "TRANSFORM_MATRIX");
+        pb1.program.linkMatrixUniformVariable(transformMatrix, "TRANSFORM_MATRIX");
     
         
         pb2.use();

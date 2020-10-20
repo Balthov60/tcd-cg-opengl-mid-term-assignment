@@ -6,7 +6,7 @@
 //
 
 #pragma once
-#include "GLUtils.hpp"
+#include "CGUtils.hpp"
 #include <fstream>
 #include <iostream>
 #include <string.h>

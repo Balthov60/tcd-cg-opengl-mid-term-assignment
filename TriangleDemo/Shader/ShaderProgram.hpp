@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "GLUtils.hpp"
+#include "CGUtils.hpp"
 #include "Shader.hpp"
 
 class ShaderProgram
@@ -40,10 +40,10 @@ public:
      Add matrix uniform variable
      Program need to be loaded through use() before calling this method.
      */
-    void linkMatrixUniformVariable(const GLfloat * value, const char * name)
+    void linkMatrixUniformVariable(const mat4 mat, const char * name)
     {
         GLuint uniformVariableLocation = getUniformVariableLocation(name);
-        glUniformMatrix4fv(uniformVariableLocation, 1, GL_FALSE, value);
+        glUniformMatrix4fv(uniformVariableLocation, 1, GL_FALSE, value_ptr(mat));
     }
     
     // check if program can execute given the current pipeline state

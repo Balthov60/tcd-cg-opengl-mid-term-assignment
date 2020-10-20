@@ -6,7 +6,7 @@
 //
 
 #pragma once
-#include "GLUtils.hpp"
+#include "CGUtils.hpp"
 #include "ShaderProgram.hpp"
 #include "VertexBuffer.hpp"
 

@@ -1,4 +1,4 @@
-#include "GLUtils.hpp"
+#include "CGUtils.hpp"
 #include "ShaderProgram.hpp"
 #include "VertexBuffer.hpp"
 #include "VertexArray.hpp"
@@ -49,15 +49,8 @@ int main(int argc, char** argv){
     ShaderProgram program = ShaderProgram("model_loading.vs", "model_loading.fs");
     Model model = Model("res/models/nanosuit.blend");
     
-    // Enabled Alpha Channel
-    // glEnable(GL_BLEND);
-    // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    
     // Setup keyboard listener
     // glfwSetKeyCallback(window, keyboardListener);
-    
-    // Camera ??
-    Camera camera( glm::vec3( 0.0f, 0.0f, 3.0f ) );
     
     // Projection ??
     mat4 projection = perspective(camera.GetZoom(), (float)WIDTH/(float)HEIGHT, 0.1f, 100.0f);

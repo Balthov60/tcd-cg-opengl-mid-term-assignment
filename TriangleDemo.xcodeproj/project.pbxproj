@@ -12,7 +12,6 @@
 		83C75FFF253E134E0095F769 /* image_DXT.c in Sources */ = {isa = PBXBuildFile; fileRef = 83C75FED253E134E0095F769 /* image_DXT.c */; };
 		83C76000253E134E0095F769 /* SOIL2.c in Sources */ = {isa = PBXBuildFile; fileRef = 83C75FEF253E134E0095F769 /* SOIL2.c */; };
 		83C76001253E134E0095F769 /* wfETC.c in Sources */ = {isa = PBXBuildFile; fileRef = 83C75FF9253E134E0095F769 /* wfETC.c */; };
-		83C76010253EF47A0095F769 /* maths_funcs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83C7600E253EF4790095F769 /* maths_funcs.cpp */; };
 		83C76016253EFA720095F769 /* mainModelCours.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 831595B5253E0BCC007043E4 /* mainModelCours.cpp */; };
 		83D774D12524D86400A47BA3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83D774D02524D86400A47BA3 /* OpenGL.framework */; };
 		83D774D32524D89400A47BA3 /* libGLEW.2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 83D774D22524D89400A47BA3 /* libGLEW.2.1.0.dylib */; };
@@ -40,7 +39,7 @@
 		835E24992525063F008736FE /* libglut.3.11.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglut.3.11.0.dylib; path = ../../../../../../../../../usr/local/Cellar/freeglut/3.2.1/lib/libglut.3.11.0.dylib; sourceTree = "<group>"; };
 		839733DC253DDE9D0075CD81 /* Camera.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Camera.hpp; sourceTree = "<group>"; };
 		83B48518252F53FA000A5B82 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		83B48524252F5D0D000A5B82 /* GLUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLUtils.hpp; sourceTree = "<group>"; };
+		83B48524252F5D0D000A5B82 /* CGUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CGUtils.hpp; sourceTree = "<group>"; };
 		83B4852F252F72B3000A5B82 /* ShaderProgram.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ShaderProgram.hpp; sourceTree = "<group>"; };
 		83B48536252F73C9000A5B82 /* Shader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Shader.hpp; sourceTree = "<group>"; };
 		83B4853F252F8145000A5B82 /* VertexBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VertexBuffer.hpp; sourceTree = "<group>"; };
@@ -67,8 +66,6 @@
 		83C75FFB253E134E0095F769 /* stbi_pkm_c.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stbi_pkm_c.h; sourceTree = "<group>"; };
 		83C75FFC253E134E0095F769 /* stbi_DDS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stbi_DDS.h; sourceTree = "<group>"; };
 		83C75FFD253E134E0095F769 /* pvr_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pvr_helper.h; sourceTree = "<group>"; };
-		83C7600E253EF4790095F769 /* maths_funcs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = maths_funcs.cpp; sourceTree = "<group>"; };
-		83C7600F253EF47A0095F769 /* maths_funcs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = maths_funcs.h; sourceTree = "<group>"; };
 		83D774C42524D82600A47BA3 /* TriangleDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TriangleDemo; sourceTree = BUILT_PRODUCTS_DIR; };
 		83D774D02524D86400A47BA3 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		83D774D22524D89400A47BA3 /* libGLEW.2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.1.0.dylib; path = ../../../../../../../../../usr/local/Cellar/glew/2.1.0_1/lib/libGLEW.2.1.0.dylib; sourceTree = "<group>"; };
@@ -100,7 +97,7 @@
 		83B48522252F5CE3000A5B82 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				83B48524252F5D0D000A5B82 /* GLUtils.hpp */,
+				83B48524252F5D0D000A5B82 /* CGUtils.hpp */,
 				83B4854B252F9100000A5B82 /* ProgramBundle.hpp */,
 				839733DC253DDE9D0075CD81 /* Camera.hpp */,
 			);
@@ -175,8 +172,6 @@
 		83D774C62524D82600A47BA3 /* TriangleDemo */ = {
 			isa = PBXGroup;
 			children = (
-				83C7600E253EF4790095F769 /* maths_funcs.cpp */,
-				83C7600F253EF47A0095F769 /* maths_funcs.h */,
 				83C75FE8253E134E0095F769 /* SOIL */,
 				83E86367253DD406006B6066 /* res */,
 				83B4853D252F812D000A5B82 /* Vertex */,
@@ -260,7 +255,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				83C76016253EFA720095F769 /* mainModelCours.cpp in Sources */,
-				83C76010253EF47A0095F769 /* maths_funcs.cpp in Sources */,
 				83C76001253E134E0095F769 /* wfETC.c in Sources */,
 				83C76000253E134E0095F769 /* SOIL2.c in Sources */,
 				83C75FFE253E134E0095F769 /* image_helper.c in Sources */,

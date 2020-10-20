@@ -13,7 +13,7 @@
 #include <assimp/postprocess.h>
 
 #include "Mesh.hpp"
-#include "GLUtils.hpp"
+#include "CGUtils.hpp"
 
 using namespace std;
 
@@ -22,11 +22,12 @@ GLint TextureFromFile( const char *path, string directory );
 class Model
 {
 public:
-    /*  Functions   */
-    // Constructor, expects a filepath to a 3D model.
-    Model( GLchar *path )
-    {
-        this->loadModel( path );
+    
+    /**
+            Load model from modelPath (path is related to model source path)
+     */
+    Model(GLchar *path) {
+        this->loadModel(MODEL_FOLDER_PATH + path);
     }
     
     /**
@@ -40,30 +41,61 @@ public:
     }
     
 private:
+    const static string MODEL_FOLDER_PATH;
+
     /*  Model Data  */
     vector<Mesh> meshes;
     string directory;
-    vector<Texture> textures_loaded;    // Stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
+    vector<Texture> textures_loaded;
     
-    /*  Functions   */
-    // Loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
-    void loadModel( string path )
+    void loadModel(string path)
     {
-        // Read file via ASSIMP
-        Assimp::Importer importer;
-        const aiScene *scene = importer.ReadFile( path, aiProcess_Triangulate | aiProcess_FlipUVs );
-        
-        // Check for errors
-        if( !scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode ) // if is Not Zero
-        {
-            cout << "ERROR::ASSIMP:: " << importer.GetErrorString( ) << endl;
-            return;
+        ModelData modelData;
+
+        /* The second flag (aiProcess_PreTransformVertices) is relevant if there are multiple meshes in the model file that are offset from the origin. This is pre-transform them so they're in the right */
+        GLuint flags = aiProcess_Triangulate | aiProcess_PreTransformVertices
+        const aiScene* scene = aiImportFile(file_name,
+            aiProcess_Triangulate | aiProcess_PreTransformVertices
+        );
+
+        if (!scene) {
+            fprintf(stderr, "ERROR: reading mesh %s\n", file_name);
+            return modelData;
         }
-        // Retrieve the directory path of the filepath
-        this->directory = path.substr( 0, path.find_last_of( '/' ) );
-        
-        // Process ASSIMP's root node recursively
-        this->processNode( scene->mRootNode, scene );
+
+        printf("  %i materials\n", scene->mNumMaterials);
+        printf("  %i meshes\n", scene->mNumMeshes);
+        printf("  %i textures\n", scene->mNumTextures);
+
+        for (unsigned int m_i = 0; m_i < scene->mNumMeshes; m_i++) {
+            const aiMesh* mesh = scene->mMeshes[m_i];
+            printf("    %i vertices in mesh\n", mesh->mNumVertices);
+            modelData.mPointCount += mesh->mNumVertices;
+            for (unsigned int v_i = 0; v_i < mesh->mNumVertices; v_i++) {
+                if (mesh->HasPositions()) {
+                    const aiVector3D* vp = &(mesh->mVertices[v_i]);
+                    modelData.mVertices.push_back(vec3(vp->x, vp->y, vp->z));
+                }
+                if (mesh->HasNormals()) {
+                    const aiVector3D* vn = &(mesh->mNormals[v_i]);
+                    modelData.mNormals.push_back(vec3(vn->x, vn->y, vn->z));
+                }
+                if (mesh->HasTextureCoords(0)) {
+                    const aiVector3D* vt = &(mesh->mTextureCoords[0][v_i]);
+                    modelData.mTextureCoords.push_back(vec2(vt->x, vt->y));
+                }
+                if (mesh->HasTangentsAndBitangents()) {
+                    /* You can extract tangents and bitangents here              */
+                    /* Note that you might need to make Assimp generate this     */
+                    /* data for you. Take a look at the flags that aiImportFile  */
+                    /* can take.                                                 */
+                }
+                
+            }
+        }
+
+        aiReleaseImport(scene);
+        return modelData;
     }
     
     // Processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
@@ -233,3 +265,5 @@ GLint TextureFromFile( const char *path, string directory )
     
     return textureID;
 }
+
+const string Model::MODEL_FOLDER_PATH = "res/models/";
