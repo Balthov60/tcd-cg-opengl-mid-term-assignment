@@ -25,14 +25,19 @@ public:
     void draw(ShaderProgram shaderProgram)
     {
         for (int i = 0; i < meshes.size(); i++) {
-            this->meshes[i].draw(shaderProgram);
+            printf("displaying Mesh %i\n", i);
+            this->meshes[i]->draw(shaderProgram);
         }
+    }
+    
+    ~Model() {
+        printf("Delete Model\n");
     }
     
 private:
     const static string MODEL_FOLDER_PATH;
     
-    vector<Mesh> meshes;
+    vector<Mesh *> meshes;
     
     void loadModel(string path)
     {
@@ -83,6 +88,7 @@ private:
             }
             
         }
+        meshes.push_back(new Mesh(meshData));
     }
 };
 

@@ -20,24 +20,6 @@
 #include "VertexBuffer.hpp"
 #include "VertexArray.hpp"
 
-using namespace std;
-
-struct Vertex
-{
-    vec3 position;
-    vec3 normal;
-    
-    // ??
-    vec2 texCoords;
-};
-
-struct Texture
-{
-    GLuint id;
-    string type;
-    aiString path;
-};
-
 typedef struct
 {
     GLsizei verticesCount;
@@ -45,6 +27,7 @@ typedef struct
     std::vector<vec3> normals;
     std::vector<vec2> textureCoords;
 } MeshData;
+
 class Mesh
 {
     
@@ -63,11 +46,12 @@ public:
         vertexArray->use();
         
         shaderProgram.validate();
+        //printf("Draw %i triangles | vertexArray not null : %d\n", data.verticesCount, vertexArray != NULL);
         glDrawArrays(GL_TRIANGLES, 0, data.verticesCount);
     }
     
     ~Mesh() {
-        printf("Delete Mesh");
+        printf("Delete Mesh\n");
         delete vertexArray;
     }
     
