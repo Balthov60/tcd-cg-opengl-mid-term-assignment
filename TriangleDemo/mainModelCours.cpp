@@ -33,7 +33,7 @@ MESH TO LOAD
 // put the mesh in your project directory, or provide a filepath for it here
 #define MESH_NAME "res/models/monkey/monkeyhead_smooth.dae"
 // #define MESH_NAME "res/models/test/Koltuk.obj"
- #define MESH_NAME "res/models/nanosuit.obj"
+// #define MESH_NAME "res/models/nanosuit.obj"
 
 /*----------------------------------------------------------------------------
 ----------------------------------------------------------------------------*/

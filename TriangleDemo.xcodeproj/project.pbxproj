@@ -8,11 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		835E249A2525063F008736FE /* libglut.3.11.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 835E24992525063F008736FE /* libglut.3.11.0.dylib */; };
+		83898450253FA01B002E72EA /* mainModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83E86320253DCD2F006B6066 /* mainModel.cpp */; };
 		83C75FFE253E134E0095F769 /* image_helper.c in Sources */ = {isa = PBXBuildFile; fileRef = 83C75FE9253E134E0095F769 /* image_helper.c */; };
 		83C75FFF253E134E0095F769 /* image_DXT.c in Sources */ = {isa = PBXBuildFile; fileRef = 83C75FED253E134E0095F769 /* image_DXT.c */; };
 		83C76000253E134E0095F769 /* SOIL2.c in Sources */ = {isa = PBXBuildFile; fileRef = 83C75FEF253E134E0095F769 /* SOIL2.c */; };
 		83C76001253E134E0095F769 /* wfETC.c in Sources */ = {isa = PBXBuildFile; fileRef = 83C75FF9253E134E0095F769 /* wfETC.c */; };
-		83C76016253EFA720095F769 /* mainModelCours.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 831595B5253E0BCC007043E4 /* mainModelCours.cpp */; };
 		83D774D12524D86400A47BA3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83D774D02524D86400A47BA3 /* OpenGL.framework */; };
 		83D774D32524D89400A47BA3 /* libGLEW.2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 83D774D22524D89400A47BA3 /* libGLEW.2.1.0.dylib */; };
 		83D774D52524D8AC00A47BA3 /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 83D774D42524D8AC00A47BA3 /* libglfw.3.3.dylib */; };
@@ -254,7 +254,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83C76016253EFA720095F769 /* mainModelCours.cpp in Sources */,
+				83898450253FA01B002E72EA /* mainModel.cpp in Sources */,
 				83C76001253E134E0095F769 /* wfETC.c in Sources */,
 				83C76000253E134E0095F769 /* SOIL2.c in Sources */,
 				83C75FFE253E134E0095F769 /* image_helper.c in Sources */,

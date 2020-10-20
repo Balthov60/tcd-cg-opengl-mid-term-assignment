@@ -1,96 +1,101 @@
+// Std. Includes
+#include <string>
+
+// GLEW
+#define GLEW_STATIC
+#include <GL/glew.h>
+
+// GLFW
+#include <GLFW/glfw3.h>
+
+#include <fstream>
+#include <string>
+#include <vector>
+
+// GL includes
+
+// Assimp includes
+#include <assimp/cimport.h> // scene importer
+#include <assimp/scene.h> // collects data
+#include <assimp/postprocess.h> // various extra operations
+
 #include "CGUtils.hpp"
 #include "ShaderProgram.hpp"
-#include "VertexBuffer.hpp"
-#include "VertexArray.hpp"
-#include "ProgramBundle.hpp"
 #include "Model.hpp"
-#include "Camera.hpp"
-
-#include <iostream>
 
 using namespace std;
-using namespace glm;
 
-float rotateValue = 0.0f;
-float translateValue = 0.0f;
-void keyboardListener(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    if (key == GLFW_KEY_UP && action == GLFW_PRESS)
-    {
-        rotateValue += 0.1f;
-    }
-    else if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
-    {
-        rotateValue -= 0.1f;
-    }
-    else if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
-    {
-        translateValue -= 0.1f;
-    }
-    else if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
-    {
-        translateValue += 0.1f;
-    }
-}
+GLfloat rotate_y = 0.0f;
+GLfloat deltaTime = 0.0f;
+GLfloat lastFrame = 0.0f;
 
-mat4 generateTransformMatrice() {
+int main( )
+{
+    
+    GLFWwindow * window = CGUtils::GetInstance().initAndGetWindow();
+    
+    //init function
+    ShaderProgram shaderProgram("simpleVertexShader.txt", "simpleFragmentShader.txt");
+    Model model = Model("monkey/monkeyhead_smooth.dae");
 
-    mat4 translationMatrix = mat4(1.0f);
-    mat4 rotationMatrix = mat4(1.0f);
-    
-    translationMatrix = translate(mat4(1.0f), vec3(translateValue, 0.0f, 0.0f));
-    rotationMatrix = rotate(mat4(1.0f), rotateValue , vec3(0.0f, 1.0f, 0.0f));
-    
-    return translationMatrix * rotationMatrix;
-}
-
-int main(int argc, char** argv){
-    GLFWwindow *window = WindowUtils::GetInstance().createWindow();
-
-    ShaderProgram program = ShaderProgram("model_loading.vs", "model_loading.fs");
-    Model model = Model("res/models/nanosuit.blend");
-    
-    // Setup keyboard listener
-    // glfwSetKeyCallback(window, keyboardListener);
-    
-    // Projection ??
-    mat4 projection = perspective(camera.GetZoom(), (float)WIDTH/(float)HEIGHT, 0.1f, 100.0f);
-    
-    // Display Loop
-    while (!glfwWindowShouldClose(window))
+    // Game loop
+    while(!glfwWindowShouldClose(window))
     {
+        /* Idle */
+        GLfloat currentFrame = glfwGetTime();
+        if (lastFrame == 0) {
+            lastFrame = currentFrame;
+        }
+        float delta = (currentFrame - lastFrame);
+        lastFrame = currentFrame;
+
+        // Rotate the model slowly around the y axis at 20 degrees per second
+        rotate_y += 20.0f * delta;
+        rotate_y = fmodf(rotate_y, 360.0f);
+        
+        
+        /* Event */
         glfwPollEvents();
         
-        glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        /* Display */
+        glClearColor(0.2f, radians(rotate_y / 10), 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+
+        shaderProgram.use();
+
+        // Root of the Hierarchy
+        mat4 view = identity<mat4>();
+        mat4 persp_proj = perspective(45.0f, (float)WIDTH / (float)HEIGHT, 0.1f, 1000.0f);
+        mat4 modelMatrice = identity<mat4>();
+        modelMatrice = rotate(modelMatrice, radians(rotate_y), vec3(0, 0, 1));
+        view = translate(view, vec3(0.0, 0.0, -10.0f));
+
+        // update uniforms
+        shaderProgram.linkMatrixUniformVariable(persp_proj, "proj");
+        shaderProgram.linkMatrixUniformVariable(view, "view");
+        shaderProgram.linkMatrixUniformVariable(modelMatrice, "model");
+
+        model.draw(shaderProgram);
+
         
-        program.use();
-        
-        mat4 view = camera.GetViewMatrix();
-        program.linkMatrixUniformVariable(value_ptr(projection), "projection");
-        program.linkMatrixUniformVariable(value_ptr(view), "view");
-        
-        // Draw the loaded model
-        mat4 transform;
-        transform = translate(transform, vec3(0.0f, -1.75f, 0.0f));
-        transform = scale(transform, vec3(0.2f, 0.2f, 0.2f));
-        program.linkMatrixUniformVariable(value_ptr(transform), "transform");
-                
-        model.draw(program);
-    
+        // Set up the child matrix
+        mat4 modelChild = identity<mat4>();
+        modelChild = rotate(modelChild, radians(180.0f), vec3(0, 0, 1));
+        modelChild = rotate(modelChild, radians(rotate_y), vec3(0, 1, 0));
+        modelChild = translate(modelChild, vec3(0.0f, -1.9f, 0.0f));
+
+        // Apply the root matrix to the child matrix
+        modelChild = modelMatrice * modelChild;
+
+        // Update the appropriate uniform and draw the mesh again
+        shaderProgram.linkMatrixUniformVariable(modelChild, "model");
+
+        model.draw(shaderProgram);
+
         glfwSwapBuffers(window);
-        printf("here");
     }
+    
+    glfwTerminate();
     
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-

@@ -12,21 +12,21 @@
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 class VertexBuffer {
-    
-private:
-    GLuint verticesQty;
-    vec3 * vertices;
-    vec4 * colors;
-    
+
 public:
     
     GLuint buffer;
+    GLuint unitSize;
     
-    VertexBuffer(GLuint verticesQty, vec3 vertices[], vec4 colors[]) {
-        this->verticesQty = verticesQty;
-        this->vertices = vertices;
-        this->colors = colors;
+    template <class T> VertexBuffer(vector<T> data) {
+        glGenBuffers(1, &buffer);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer);
         
+        unitSize = sizeof(T);
+        glBufferData(GL_ARRAY_BUFFER, data.size() * unitSize, &data[0], GL_STATIC_DRAW);
+    }
+    
+    VertexBuffer(GLuint verticesQty , vec3 vertices[], vec4 colors[]) {
         glGenBuffers(1, &buffer);
         glBindBuffer(GL_ARRAY_BUFFER, buffer);
         
