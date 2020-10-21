@@ -3,4 +3,54 @@
    uuid = "D50E6B2D-EF55-4517-ABBF-B34E699E57F7"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "46A7048B-92C0-4C8E-A108-3443BB2F43C2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TriangleDemo/Vertex/Model.hpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "~Model()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "46A7048B-92C0-4C8E-A108-3443BB2F43C2 - f9b00a6ff37b4445"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Model::~Model()"
+                  moduleName = "TriangleDemo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/balthazarfrolin/Documents/INSA/TCD/Repositories/ComputerGraphics/TriangleDemoXCode/TriangleDemo/TriangleDemo/Vertex/Model.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "32"
+                  endingLineNumber = "32"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  uuid = "46A7048B-92C0-4C8E-A108-3443BB2F43C2 - f9b00a6ff37b4424"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Model::~Model()"
+                  moduleName = "TriangleDemo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/balthazarfrolin/Documents/INSA/TCD/Repositories/ComputerGraphics/TriangleDemoXCode/TriangleDemo/TriangleDemo/Vertex/Model.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "33"
+                  endingLineNumber = "33"
+                  offsetFromSymbolStart = "16">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

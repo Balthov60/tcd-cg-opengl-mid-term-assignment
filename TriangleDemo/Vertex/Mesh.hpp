@@ -32,7 +32,7 @@ class Mesh
 {
     
 public:
-    Mesh(MeshData data) : data(data) {        
+    Mesh(MeshData data) : data(data) {
         vertexBuffers.push_back(VertexBuffer(data.vertices));
         vertexBuffers.push_back(VertexBuffer(data.normals));
         
@@ -46,12 +46,10 @@ public:
         vertexArray->use();
         
         shaderProgram.validate();
-        //printf("Draw %i triangles | vertexArray not null : %d\n", data.verticesCount, vertexArray != NULL);
         glDrawArrays(GL_TRIANGLES, 0, data.verticesCount);
     }
     
     ~Mesh() {
-        printf("Delete Mesh\n");
         delete vertexArray;
     }
     

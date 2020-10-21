@@ -1,92 +1,37 @@
+// Std. Includes
+#include <string>
+
+// GLEW
+#define GLEW_STATIC
+#include <GL/glew.h>
+
+// GLFW
+#include <GLFW/glfw3.h>
+
+#include <fstream>
+#include <string>
+#include <vector>
+
+// GL includes
+
+// Assimp includes
+#include <assimp/cimport.h> // scene importer
+#include <assimp/scene.h> // collects data
+#include <assimp/postprocess.h> // various extra operations
+
 #include "CGUtils.hpp"
 #include "ShaderProgram.hpp"
-#include "VertexBuffer.hpp"
-#include "VertexArray.hpp"
-#include "ProgramBundle.hpp"
-
-#include <iostream>
+#include "Model.hpp"
 
 using namespace std;
 
-ProgramBundle initEx1()
-{
-    vec3 vertices[] = { // Based on 0
-        // Triangle -1
-        vec3(-1.5f, -0.5f, 0.0f), // bottom left
-        vec3(-0.5f, -0.5f, 0.0f), // bottom right
-        vec3(-1.0f, 0.5f, 0.0f), // top
-        // Triangle 0
-        vec3(-0.5f, -0.5f, 0.0f), // bottom left
-        vec3(0.5f, -0.5f, 0.0f), // bottom right
-        vec3(0.0f, 0.5f, 0.0f), // top
-        // Triangle 1
-        vec3(0.5f, -0.5f, 0.0f), // bottom left
-        vec3(1.5f, -0.5f, 0.0f), // bottom right
-        vec3(1.0f, 0.5f, 0.0f), // top
-    };
-    vec4 colors[] = {
-        // Triangle -1
-        vec4(0.0f, 1.0f, 0.0f, 1.0f),
-        vec4(1.0f, 0.0f, 0.0f, 1.0f),
-        vec4(0.0f, 0.0f, 1.0f, 1.0f),
-        // Triangle 0
-        vec4(0.0f, 1.0f, 0.0f, 1.0f),
-        vec4(1.0f, 0.0f, 0.0f, 1.0f),
-        vec4(0.0f, 0.0f, 1.0f, 1.0f),
-        // Triangle 1
-        vec4(0.0f, 1.0f, 0.0f, 1.0f),
-        vec4(1.0f, 0.0f, 0.0f, 1.0f),
-        vec4(0.0f, 0.0f, 1.0f, 1.0f),
-    };
+GLfloat rotate_y = 0.0f;
+GLfloat deltaTime = 0.0f;
+GLfloat lastFrame = 0.0f;
 
-    // Set up the shaders
-    Shader defaultVertexShader = Shader("transform.vs", GL_VERTEX_SHADER);
-    Shader defaultFragmentShader = Shader("default.fs", GL_FRAGMENT_SHADER);
-
-    ShaderProgram program = ShaderProgram(defaultVertexShader, defaultFragmentShader);
-    VertexBuffer vb = VertexBuffer(9, vertices, colors);
-
-    // Link the current buffer to the shader
-    VertexArray va = VertexArray(9, vb, program);
-    
-    return ProgramBundle(program, va);
-}
-
-ProgramBundle initEx2()
-{
-    vec3 vertices[] = { // Based on 0
-        vec3(1.0f, 0.5f, 0.0f), // top
-        vec3(0.5f, -0.5f, 0.0f), // bottom right
-        vec3(0.0f, 0.5f, 0.0f) // top
-    };
-    vec4 colors[] = {
-        vec4(0.0f, 1.0f, 0.0f, 1.0f),
-        vec4(1.0f, 0.0f, 0.0f, 1.0f),
-        vec4(1.0f, 0.0f, 1.0f, 1.0f)
-    };
-        
-    Shader defaultVertexShader = Shader("default.vs", GL_VERTEX_SHADER);
-    Shader defaultFragmentShader = Shader("yellow.fs", GL_FRAGMENT_SHADER);
-    ShaderProgram program = ShaderProgram(defaultVertexShader, defaultFragmentShader);
-    
-    VertexBuffer vb = VertexBuffer(3, vertices, colors);
-    VertexArray va = VertexArray(3, vb, program);
-    
-    return ProgramBundle(program, va);
-}
-
-float rotateValue = 0.0f;
 float translateValue = 0.0f;
 void keyboardListener(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    if (key == GLFW_KEY_UP && action == GLFW_PRESS)
-    {
-        rotateValue += 0.1f;
-    }
-    else if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
-    {
-        rotateValue -= 0.1f;
-    }
-    else if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
+    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
     {
         translateValue -= 0.1f;
     }
@@ -96,64 +41,77 @@ void keyboardListener(GLFWwindow* window, int key, int scancode, int action, int
     }
 }
 
-mat4 generateTransformMatrice() {
-
-    mat4 translationMatrix = mat4(1.0f);
-    mat4 rotationMatrix = mat4(1.0f);
+int main( )
+{
     
-    translationMatrix = translate(mat4(1.0f), vec3(translateValue, 0.0f, 0.0f));
-    rotationMatrix = rotate(mat4(1.0f), rotateValue , vec3(0.0f, 1.0f, 0.0f));
+    GLFWwindow * window = CGUtils::GetInstance().initAndGetWindow();
     
-    return translationMatrix * rotationMatrix;
-}
-
-int main(int argc, char** argv){
-    GLFWwindow *window = WindowUtils::GetInstance().createWindow();
-    
-    ProgramBundle pb1 = initEx1();
-    ProgramBundle pb2 = initEx2();
-    
-    // Enabled Alpha Channel
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    
-    // Setup keyboard listener
     glfwSetKeyCallback(window, keyboardListener);
     
-    // Display Loop
-    while (!glfwWindowShouldClose(window))
+    //init function
+    ShaderProgram shaderProgram("simpleVertexShader.vs", "simpleFragmentShader.fs");
+    Model model("test/Koltuk.3ds");
+    
+    // Game loop
+    while(!glfwWindowShouldClose(window))
     {
-        glfwPollEvents();
-        
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        /* Idle */
+        GLfloat currentFrame = glfwGetTime();
+        if (lastFrame == 0) {
+            lastFrame = currentFrame;
+        }
+        float delta = (currentFrame - lastFrame);
+        lastFrame = currentFrame;
 
-        mat4 transformMatrix = generateTransformMatrice();
-        pb1.use();
-        pb1.program.linkMatrixUniformVariable(transformMatrix, "TRANSFORM_MATRIX");
-    
+        // Rotate the model slowly around the y axis at 20 degrees per second
+        rotate_y += 20.0f * delta;
+        rotate_y = fmodf(rotate_y, 360.0f);
+
+
+        /* Event */
+        glfwPollEvents();
+
+        /* Display */
+        glClearColor(0.2f, radians(rotate_y / 10), 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+
+        // Root of the Hierarchy
+        mat4 view = identity<mat4>();
+        mat4 persp_proj = perspective(45.0f, (float)WIDTH / (float)HEIGHT, 0.1f, 1000.0f);
+        mat4 modelMatrice = identity<mat4>();
+        modelMatrice = translate(modelMatrice, vec3(translateValue, 0, 0));
+        modelMatrice = rotate(modelMatrice, radians(rotate_y), vec3(0, 0, 1));
+        view = translate(view, vec3(0.0, 0.0, -10.0f));
+
+        // update uniforms
+        shaderProgram.use();
+        shaderProgram.linkMatrixUniformVariable(persp_proj, "proj");
+        shaderProgram.linkMatrixUniformVariable(view, "view");
+        shaderProgram.linkMatrixUniformVariable(modelMatrice, "model");
         
-        pb2.use();
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-    
-        
-        pb1.use();
-        glDrawArrays(GL_TRIANGLES, 0, 9);
-    
+        // Draw
+        model.draw(shaderProgram);
+
+
+        // Set up the child matrix
+        mat4 modelChild = identity<mat4>();
+        modelChild = rotate(modelChild, radians(180.0f), vec3(0, 0, 1));
+        modelChild = rotate(modelChild, radians(rotate_y), vec3(0, 1, 0));
+        modelChild = translate(modelChild, vec3(0.0f, -1.9f, 0.0f));
+
+        // Apply the root matrix to the child matrix
+        modelChild = modelMatrice * modelChild;
+
+        // Update the appropriate uniform and draw the mesh again
+        shaderProgram.use();
+        shaderProgram.linkMatrixUniformVariable(modelChild, "model");
+
+        model.draw(shaderProgram);
 
         glfwSwapBuffers(window);
     }
     
+    glfwTerminate();
+    
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-

@@ -24,6 +24,8 @@ using namespace std;
 #include <assimp/scene.h> // collects data
 #include <assimp/postprocess.h> // various extra operations
 #include "ShaderProgram.hpp"
+#include "VertexBuffer.hpp"
+#include "VertexArray.hpp"
 
 
 /*----------------------------------------------------------------------------
@@ -59,7 +61,6 @@ GLuint loc1, loc2, loc3;
 GLfloat rotate_y = 0.0f;
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
-GLuint vao;
 
 /*----------------------------------------------------------------------------
 MESH LOADING FUNCTION
@@ -118,50 +119,18 @@ ModelData load_mesh(const char* file_name) {
     return modelData;
 }
 
-void generateObjectBufferMesh(ShaderProgram shaderProgram) {
-    /*----------------------------------------------------------------------------
-    LOAD MESH HERE AND COPY INTO BUFFERS
-    ----------------------------------------------------------------------------*/
-
-    //Note: you may get an error "vector subscript out of range" if you are using this code for a mesh that doesnt have positions and normals
-    //Might be an idea to do a check for that before generating and binding the buffer.
-
+VertexArray * vaoO;
+void generateObjectBufferMesh() {
     mesh_data = load_mesh(MESH_NAME);
-    unsigned int vp_vbo = 0;
-    loc1 = glGetAttribLocation(shaderProgram.program, "vertex_position");
-    loc2 = glGetAttribLocation(shaderProgram.program, "vertex_normal");
-    loc3 = glGetAttribLocation(shaderProgram.program, "vertex_texture");
-
-    glGenBuffers(1, &vp_vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vp_vbo);
     
-    glBufferData(GL_ARRAY_BUFFER, mesh_data.mPointCount * sizeof(vec3), &mesh_data.mVertices[0], GL_STATIC_DRAW);
-    unsigned int vn_vbo = 0;
-    glGenBuffers(1, &vn_vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vn_vbo);
-    glBufferData(GL_ARRAY_BUFFER, mesh_data.mPointCount * sizeof(vec3), &mesh_data.mNormals[0], GL_STATIC_DRAW);
-
-    //    This is for texture coordinates which you don't currently need, so I have commented it out
-    //    unsigned int vt_vbo = 0;
-    //    glGenBuffers (1, &vt_vbo);
-    //    glBindBuffer (GL_ARRAY_BUFFER, vt_vbo);
-    //    glBufferData (GL_ARRAY_BUFFER, monkey_head_data.mTextureCoords * sizeof (vec2), &monkey_head_data.mTextureCoords[0], GL_STATIC_DRAW);
-
-    glGenVertexArrays(1, &vao);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vp_vbo);
-    glBindVertexArray(vao);
-
-    glEnableVertexAttribArray(loc1);
-    glVertexAttribPointer(loc1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    vector<VertexBuffer> vbos;
+    vbos.push_back(VertexBuffer(mesh_data.mVertices));
+    vbos.push_back(VertexBuffer(mesh_data.mNormals));
     
     
-    glBindBuffer(GL_ARRAY_BUFFER, vn_vbo);
-    glBindVertexArray(vao);
+    vaoO = new VertexArray(vbos);
+    vaoO->use();
     
-    glEnableVertexAttribArray(loc2);
-    glVertexAttribPointer(loc2, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-
     //    This is for texture coordinates which you don't currently need, so I have commented it out
     //    glEnableVertexAttribArray (loc3);
     //    glBindBuffer (GL_ARRAY_BUFFER, vt_vbo);
@@ -175,7 +144,7 @@ int main( )
     
     //init function
     ShaderProgram shaderProgram("simpleVertexShader.txt", "simpleFragmentShader.txt");
-    generateObjectBufferMesh(shaderProgram);
+    generateObjectBufferMesh();
     shaderProgram.validate();
     
     // Game loop

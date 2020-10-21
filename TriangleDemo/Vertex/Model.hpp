@@ -25,13 +25,14 @@ public:
     void draw(ShaderProgram shaderProgram)
     {
         for (int i = 0; i < meshes.size(); i++) {
-            printf("displaying Mesh %i\n", i);
             this->meshes[i]->draw(shaderProgram);
         }
     }
     
     ~Model() {
-        printf("Delete Model\n");
+        for (int i = 0; i < meshes.size(); i++) {
+            delete this->meshes[i];
+        }
     }
     
 private:
@@ -50,6 +51,7 @@ private:
             exit(1);
         }
 
+        printf("Loading model : %s\n", path.c_str());
         printf("  %i materials\n", scene->mNumMaterials);
         printf("  %i meshes\n", scene->mNumMeshes);
         printf("  %i textures\n", scene->mNumTextures);

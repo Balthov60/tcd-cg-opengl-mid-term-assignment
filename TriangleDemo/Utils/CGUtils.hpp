@@ -35,7 +35,6 @@ const int COLOR_SIZE = 4 * sizeof(float);
 const int VERTICE_SIZE = 3 * sizeof(float);
 const int TOTAL_SIZE = COLOR_SIZE + VERTICE_SIZE;
 
-
 /* Initialisation Class */
 
 class CGUtils
