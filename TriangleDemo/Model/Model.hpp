@@ -5,7 +5,7 @@
 //  Created by Balthazar Frolin on 19/10/2020.
 //
 
-#pragma
+#pragma once
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -22,8 +22,10 @@ public:
         this->loadModel(MODEL_FOLDER_PATH + path);
     }
     
-    void draw(ShaderProgram shaderProgram)
+    void draw(ShaderProgram shaderProgram, Transformation transform)
     {
+        shaderProgram.setupTransformMatrix(transform);
+        
         for (int i = 0; i < meshes.size(); i++) {
             this->meshes[i]->draw(shaderProgram);
         }

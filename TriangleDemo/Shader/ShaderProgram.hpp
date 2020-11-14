@@ -9,6 +9,8 @@
 
 #include "CGUtils.hpp"
 #include "Shader.hpp"
+#include "Projection.hpp"
+#include "Transformation.hpp"
 
 class ShaderProgram
 {
@@ -34,6 +36,28 @@ public:
     void use()
     {
         glUseProgram(program);
+    }
+    
+    /*void setupUniformMatrix(Projection projection, Camera * camera, Transformation transform) {
+        use();
+        linkMatrixUniformVariable(projection.getProjectionMatrix(), "projection");
+        linkMatrixUniformVariable(camera->getViewMatrix(), "view");
+        linkMatrixUniformVariable(transform.matrix, "transform");
+    }*/
+    
+    void setupUniformMatrix(Projection projection, Camera * camera, Transformation transform) {
+        use();
+        setupGlobalMatrix(projection, camera);
+        setupTransformMatrix(transform);
+    }
+    void setupGlobalMatrix(Projection projection, Camera * camera) {
+        use();
+        linkMatrixUniformVariable(projection.getProjectionMatrix(), "projection");
+        linkMatrixUniformVariable(camera->getViewMatrix(), "view");
+    }
+    void setupTransformMatrix(Transformation transform) {
+        use();
+        linkMatrixUniformVariable(transform.matrix, "transform");
     }
     
     /*

@@ -3,6 +3,7 @@
 #include "VertexBuffer.hpp"
 #include "VertexArray.hpp"
 #include "ProgramBundle.hpp"
+#include "Projection.hpp"
 
 #include <iostream>
 
@@ -75,6 +76,7 @@ ProgramBundle initEx2()
     return ProgramBundle(program, va);
 }
 
+Projection * projection;
 float rotateValue = 0.0f;
 float translateValue = 0.0f;
 void keyboardListener(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -94,6 +96,14 @@ void keyboardListener(GLFWwindow* window, int key, int scancode, int action, int
     {
         translateValue += 0.1f;
     }
+    
+    if (key == GLFW_KEY_O && action == GLFW_PRESS) {
+        projection->type = ORTHOGRAPHIC;
+        printf("To Ortho\n");
+    } else if (key == GLFW_KEY_P && action == GLFW_PRESS) {
+        projection->type = PERSPECTIVE;
+        printf("To Perspeco\n");
+    }
 }
 
 mat4 generateTransformMatrice() {
@@ -108,8 +118,10 @@ mat4 generateTransformMatrice() {
 }
 
 int main(int argc, char** argv){
-    GLFWwindow *window = CGUtils::GetInstance().initAndGetWindow();
-    
+    GLFWwindow *window = CGUtils::GetInstance().initAndGetWindow(vec3(0.0, 0.0, 1.75));
+    Camera * camera = CGUtils::GetInstance().camera;
+    projection = new Projection(PERSPECTIVE, camera);
+
     ProgramBundle pb1 = initEx1();
     ProgramBundle pb2 = initEx2();
     
@@ -124,14 +136,16 @@ int main(int argc, char** argv){
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
-        
+    o
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
         mat4 transformMatrix = generateTransformMatrice();
         pb1.use();
         pb1.program.linkMatrixUniformVariable(transformMatrix, "TRANSFORM_MATRIX");
-    
+        pb1.program.linkMatrixUniformVariable(camera->getViewMatrix(), "VIEW");
+        pb1.program.linkMatrixUniformVariable(projection->getProjectionMatrix(), "PROJECTION");
+
         
         pb2.use();
         glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -146,14 +160,3 @@ int main(int argc, char** argv){
     
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-

@@ -18,6 +18,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/quaternion.hpp>
 using namespace glm;
 
 // Basic Include
@@ -25,15 +26,19 @@ using namespace glm;
 #include <string>
 using namespace std;
 
+// Common Classes
+#include "Camera.hpp"
+#include "ControlsManager.hpp"
+
 
 /* Global Constant */
 
 const GLint WIDTH = 1200, HEIGHT = 800;
-GLint SCREEN_WIDTH, SCREEN_HEIGHT;
-
 const int COLOR_SIZE = 4 * sizeof(float);
 const int VERTICE_SIZE = 3 * sizeof(float);
 const int TOTAL_SIZE = COLOR_SIZE + VERTICE_SIZE;
+
+const bool ENABLE_MOUSE = true;
 
 /* Initialisation Class */
 
@@ -48,6 +53,9 @@ private:
 public:
         
     GLFWwindow * window;
+    Camera * camera;
+    
+    GLint SCREEN_WIDTH, SCREEN_HEIGHT;
     
     static CGUtils& GetInstance()
     {
@@ -55,11 +63,16 @@ public:
         return _instance;
     }
     
-    GLFWwindow * initAndGetWindow() {
+    GLFWwindow * initAndGetWindow(vec3 cameraPosition = DEFAULT_POSITION) {
         initContext();
+        initInputListeners();
+        camera = new Camera(cameraPosition);
         return window;
     }
     
+    ~CGUtils() {
+        delete camera;
+    }
     
 private:
     
@@ -106,6 +119,10 @@ private:
             exit(1);
         }
     }
+    
+    /* Listeners */
+    
+    void initInputListeners();
     
     
     /* OPTIONS */

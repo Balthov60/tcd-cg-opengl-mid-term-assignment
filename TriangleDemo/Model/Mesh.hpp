@@ -42,15 +42,15 @@ public:
     
     void draw(ShaderProgram shaderProgram)
     {
-        shaderProgram.use();
         vertexArray->use();
-        
+        shaderProgram.use();
         shaderProgram.validate();
+        
         glDrawArrays(GL_TRIANGLES, 0, data.verticesCount);
     }
     
     ~Mesh() {
-        delete vertexArray;
+       delete vertexArray;
     }
     
 private:

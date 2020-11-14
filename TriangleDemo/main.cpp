@@ -22,92 +22,105 @@
 #include "CGUtils.hpp"
 #include "ShaderProgram.hpp"
 #include "Model.hpp"
+#include "Projection.hpp"
+#include "Transformation.hpp"
+#include "ProgramBundle.hpp"
+#include "HierarchicalModel.hpp"
+#include "Animation.hpp"
+
+#include "SpiderModelUtils.hpp"
 
 using namespace std;
 
-GLfloat rotate_y = 0.0f;
-GLfloat deltaTime = 0.0f;
-GLfloat lastFrame = 0.0f;
-
-float translateValue = 0.0f;
-void keyboardListener(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
-    {
-        translateValue -= 0.1f;
-    }
-    else if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
-    {
-        translateValue += 0.1f;
-    }
+ProgramBundle createPlan() {
+    float planYOffset = 0.0;
+    float axisYOffset = planYOffset + 0.1f;
+    vec3 vertexArray[] = {
+        vec3(-100.0, planYOffset, -100.0), vec3(100.0, planYOffset, -100.0), vec3(-100.0, planYOffset, 100.0),   // Half Plan
+        vec3(100.0, planYOffset, 100.0), vec3(-100.0, planYOffset, 100.0), vec3(100.0, planYOffset, -100.0),     // 2HalfPlan
+        vec3(-100.0, axisYOffset, 0.0), vec3(100.0, axisYOffset, 0.0), vec3(0.0, axisYOffset, 1.0),                 // XAxis
+        vec3(0.0, axisYOffset, -100.0), vec3(0.0, axisYOffset, 100.0), vec3(1.0, axisYOffset, 0.0),                 // ZAxis
+        vec3(0.0, -100.0, 0.5), vec3(0.0, 100, 0.5), vec3(1.0, axisYOffset, 0.5),                    // YAxis
+        vec3(0.5, -100.0, 0.0), vec3(0.5, 100, 0.0), vec3(0.5, axisYOffset, 1.0),                    // YAxis
+    };
+    vec4 colorArray[] = {
+        vec4(1.0, 1.0, 1.0, 0.25), vec4(1.0, 1.0, 1.0, 0.25), vec4(1.0, 1.0, 1.0, 0.25),       // Plan White transparant
+        vec4(1.0, 1.0, 1.0, 0.25), vec4(1.0, 1.0, 1.0, 0.25), vec4(1.0, 1.0, 1.0, 0.25),       // Plan White transparant
+        vec4(0.0, 0.0, 1.0, 1.0), vec4(0.0, 0.0, 1.0, 1.0), vec4(0.0, 0.0, 1.0, 1.0),       // XAxis Blue
+        vec4(0.0, 1.0, 0.0, 1.0), vec4(0.0, 1.0, 0.0, 1.0), vec4(0.0, 1.0, 0.0, 1.0),       // ZAxis Green
+        vec4(1.0, 0.0, 0.0, 1.0), vec4(1.0, 0.0, 0.0, 1.0), vec4(1.0, 0.0, 0.0, 1.0),        // YAxis Red
+        vec4(1.0, 0.0, 0.0, 1.0), vec4(1.0, 0.0, 0.0, 1.0), vec4(1.0, 0.0, 0.0, 1.0)        // YAxis Red
+    };
+    
+    ShaderProgram planShader("transform.vs", "default.fs");
+    VertexBuffer planBuffer(18, vertexArray, colorArray);
+    VertexArray planArray(18, planBuffer, planShader);
+    
+    return ProgramBundle(planShader, planArray);
 }
 
-int main( )
+int main()
 {
-    
+    // Ini Global Components
     GLFWwindow * window = CGUtils::GetInstance().initAndGetWindow();
+    Camera * camera = CGUtils::GetInstance().camera;
+    Projection projection = Projection(PERSPECTIVE, camera);
     
-    glfwSetKeyCallback(window, keyboardListener);
-    
-    //init function
+    // Ini Main Transforms
+    Transformation rootTransform = Transformation();
+    Transformation blenderTransform = Transformation();
+    blenderTransform.rotate(90, vec3(-1, 0, 0));
+        
+    // Init Main Graphical Components
     ShaderProgram shaderProgram("simpleVertexShader.vs", "simpleFragmentShader.fs");
-    Model model("test/Koltuk.3ds");
+    ProgramBundle planProgramBundle = createPlan();
     
+    Transformation baseTransform;
+    baseTransform.translate(vec3(15, -15, 0));
+    baseTransform.rotate(45, vec3(0, 0, 1));
+    baseTransform.scale(0.75);
+    HierarchicalModel spider = createSpiderModel(baseTransform, 35);
+    
+    Transformation baseTransform2;
+    baseTransform2.translate(vec3(15, 15, 0));
+    baseTransform2.rotate(135, vec3(0, 0, 1));
+    baseTransform2.scale(0.5);
+    HierarchicalModel spider2 = createSpiderModel(baseTransform2, 10);
+
     // Game loop
+    
     while(!glfwWindowShouldClose(window))
     {
-        /* Idle */
-        GLfloat currentFrame = glfwGetTime();
-        if (lastFrame == 0) {
-            lastFrame = currentFrame;
-        }
-        float delta = (currentFrame - lastFrame);
-        lastFrame = currentFrame;
-
-        // Rotate the model slowly around the y axis at 20 degrees per second
-        rotate_y += 20.0f * delta;
-        rotate_y = fmodf(rotate_y, 360.0f);
-
-
+        ControlsManager::UpdateDeltaTime();
+        
         /* Event */
         glfwPollEvents();
-
-        /* Display */
-        glClearColor(0.2f, radians(rotate_y / 10), 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-
-        // Root of the Hierarchy
-        mat4 view = identity<mat4>();
-        mat4 persp_proj = perspective(45.0f, (float)WIDTH / (float)HEIGHT, 0.1f, 1000.0f);
-        mat4 modelMatrice = identity<mat4>();
-        modelMatrice = translate(modelMatrice, vec3(translateValue, 0, 0));
-        modelMatrice = rotate(modelMatrice, radians(rotate_y), vec3(0, 0, 1));
-        view = translate(view, vec3(0.0, 0.0, -10.0f));
-
-        // update uniforms
-        shaderProgram.use();
-        shaderProgram.linkMatrixUniformVariable(persp_proj, "proj");
-        shaderProgram.linkMatrixUniformVariable(view, "view");
-        shaderProgram.linkMatrixUniformVariable(modelMatrice, "model");
+        ControlsManager::HandleCameraMovements();
         
-        // Draw
-        model.draw(shaderProgram);
+        // Ortho to perspective
+        if (ControlsManager::isKeysPressed[GLFW_KEY_O]) {
+            projection.type = ORTHOGRAPHIC;
+        } else if (ControlsManager::isKeysPressed[GLFW_KEY_P]) {
+            projection.type = PERSPECTIVE;
+        }
+    
+        /* Display */
+        glClearColor(0.2f, 0.2, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+        
+        // Link global Matrix
+        shaderProgram.setupGlobalMatrix(projection, camera);
+        planProgramBundle.program.setupUniformMatrix(projection, camera, rootTransform);
+        
+        /* Plan & Axis */
+        planProgramBundle.use();
+        glDrawArrays(GL_TRIANGLES, 0, 18);
+        
 
-
-        // Set up the child matrix
-        mat4 modelChild = identity<mat4>();
-        modelChild = rotate(modelChild, radians(180.0f), vec3(0, 0, 1));
-        modelChild = rotate(modelChild, radians(rotate_y), vec3(0, 1, 0));
-        modelChild = translate(modelChild, vec3(0.0f, -1.9f, 0.0f));
-
-        // Apply the root matrix to the child matrix
-        modelChild = modelMatrice * modelChild;
-
-        // Update the appropriate uniform and draw the mesh again
-        shaderProgram.use();
-        shaderProgram.linkMatrixUniformVariable(modelChild, "model");
-
-        model.draw(shaderProgram);
-
+        blenderTransform = rootTransform * blenderTransform;
+        spider.draw(shaderProgram, blenderTransform);
+        spider2.draw(shaderProgram, blenderTransform);
+        
         glfwSwapBuffers(window);
     }
     

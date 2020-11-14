@@ -31,6 +31,7 @@ public:
             
             glEnableVertexAttribArray(i);
             glVertexAttribPointer(i, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+            glBindVertexArray(0);
         }
     }
 
