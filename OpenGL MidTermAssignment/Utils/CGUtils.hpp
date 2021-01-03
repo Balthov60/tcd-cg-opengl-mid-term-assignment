@@ -24,12 +24,13 @@ using namespace glm;
 // Basic Include
 #include <iostream>
 #include <string>
+#include <stdlib.h>
+#include <time.h>
 using namespace std;
 
 // Common Classes
 #include "Camera.hpp"
 #include "ControlsManager.hpp"
-
 
 /* Global Constant */
 
@@ -37,6 +38,7 @@ const GLint WIDTH = 1200, HEIGHT = 800;
 const int COLOR_SIZE = 4 * sizeof(float);
 const int VERTICE_SIZE = 3 * sizeof(float);
 const int TOTAL_SIZE = COLOR_SIZE + VERTICE_SIZE;
+const int TEX_COORD_SIZE = 2 * sizeof(float);
 
 const bool ENABLE_MOUSE = true;
 
@@ -64,6 +66,7 @@ public:
     }
     
     GLFWwindow * initAndGetWindow(vec3 cameraPosition = DEFAULT_POSITION) {
+        srand(time(NULL));
         initContext();
         initInputListeners();
         camera = new Camera(cameraPosition);

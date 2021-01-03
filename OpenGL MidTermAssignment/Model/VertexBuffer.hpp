@@ -40,6 +40,19 @@ public:
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
     
+    VertexBuffer(GLuint verticesQty , vec3 vertices[], vec4 colors[], vec2 texCoords[]) {
+        glGenBuffers(1, &buffer);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer);
+        
+        glBufferData(GL_ARRAY_BUFFER, verticesQty * TOTAL_SIZE + verticesQty * TEX_COORD_SIZE, NULL, GL_STATIC_DRAW);
+        
+        glBufferSubData(GL_ARRAY_BUFFER, 0, verticesQty * VERTICE_SIZE, vertices);
+        glBufferSubData(GL_ARRAY_BUFFER, verticesQty * VERTICE_SIZE, verticesQty * COLOR_SIZE, colors);
+        glBufferSubData(GL_ARRAY_BUFFER, verticesQty * VERTICE_SIZE + verticesQty * COLOR_SIZE, verticesQty * TEX_COORD_SIZE, texCoords);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+    
     void use() {
         glBindBuffer(GL_ARRAY_BUFFER, buffer);
     }

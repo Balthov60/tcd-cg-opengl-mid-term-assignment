@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		835E249A2525063F008736FE /* libglut.3.11.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 835E24992525063F008736FE /* libglut.3.11.0.dylib */; };
 		83789BFA2560423300B6FBC2 /* Animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83789BF9256041F300B6FBC2 /* Animation.cpp */; };
+		83A21B322581695500DE69C5 /* BoidManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83A21B312581695500DE69C5 /* BoidManager.cpp */; };
 		83B6A9EA255C22E800C316AB /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83E86320253DCD2F006B6066 /* main.cpp */; };
 		83B6A9EC255C22FD00C316AB /* ControlsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83FBCFCA2547529400E57566 /* ControlsManager.cpp */; };
 		83B6A9EE255C230200C316AB /* CGUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83FBCFCD2547532300E57566 /* CGUtils.cpp */; };
@@ -33,12 +34,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		830D99F42583CB8500F82CB6 /* Lights.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Lights.hpp; sourceTree = "<group>"; };
 		83153B572548BEC7009A50EA /* Transformation.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Transformation.hpp; sourceTree = "<group>"; };
 		83292C442524E2B400F77057 /* OpenGL MidTermAssignment.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "OpenGL MidTermAssignment.entitlements"; sourceTree = "<group>"; };
 		835E24992525063F008736FE /* libglut.3.11.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglut.3.11.0.dylib; path = ../../../../../../../../../usr/local/Cellar/freeglut/3.2.1/lib/libglut.3.11.0.dylib; sourceTree = "<group>"; };
+		8362A072257D92B800F4F7B6 /* Texture.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Texture.hpp; sourceTree = "<group>"; };
+		8362A076257FF88200F4F7B6 /* stb_image.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = stb_image.hpp; sourceTree = "<group>"; };
 		83789BF3255F599900B6FBC2 /* SpiderModelUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SpiderModelUtils.hpp; sourceTree = "<group>"; };
 		83789BF9256041F300B6FBC2 /* Animation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Animation.cpp; sourceTree = "<group>"; };
 		839733DC253DDE9D0075CD81 /* Camera.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Camera.hpp; sourceTree = "<group>"; };
+		83A21B2E258157AE00DE69C5 /* BoidManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BoidManager.hpp; sourceTree = "<group>"; };
+		83A21B312581695500DE69C5 /* BoidManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BoidManager.cpp; sourceTree = "<group>"; };
 		83B48524252F5D0D000A5B82 /* CGUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CGUtils.hpp; sourceTree = "<group>"; };
 		83B4852F252F72B3000A5B82 /* ShaderProgram.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ShaderProgram.hpp; sourceTree = "<group>"; };
 		83B48536252F73C9000A5B82 /* Shader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Shader.hpp; sourceTree = "<group>"; };
@@ -48,6 +54,7 @@
 		83B6A9CD255B4C3C00C316AB /* HierarchicalModel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HierarchicalModel.hpp; sourceTree = "<group>"; };
 		83B6A9E5255C22A900C316AB /* AnimationState.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AnimationState.hpp; sourceTree = "<group>"; };
 		83B6A9F4255C468300C316AB /* Animation.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Animation.hpp; sourceTree = "<group>"; };
+		83C6A53A25A09B5200CC5817 /* TunelModelUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TunelModelUtils.hpp; sourceTree = "<group>"; };
 		83D774C42524D82600A47BA3 /* OpenGL MidTermAssignment */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "OpenGL MidTermAssignment"; sourceTree = BUILT_PRODUCTS_DIR; };
 		83D774D02524D86400A47BA3 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		83D774D22524D89400A47BA3 /* libGLEW.2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.1.0.dylib; path = ../../../../../../../../../usr/local/Cellar/glew/2.1.0_1/lib/libGLEW.2.1.0.dylib; sourceTree = "<group>"; };
@@ -80,6 +87,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		83A21B2D2581579800DE69C5 /* Boids */ = {
+			isa = PBXGroup;
+			children = (
+				83A21B2E258157AE00DE69C5 /* BoidManager.hpp */,
+				83A21B312581695500DE69C5 /* BoidManager.cpp */,
+			);
+			path = Boids;
+			sourceTree = "<group>";
+		};
 		83B48522252F5CE3000A5B82 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -87,6 +103,8 @@
 				83FBCFCD2547532300E57566 /* CGUtils.cpp */,
 				83B4854B252F9100000A5B82 /* ProgramBundle.hpp */,
 				83789BF3255F599900B6FBC2 /* SpiderModelUtils.hpp */,
+				8362A076257FF88200F4F7B6 /* stb_image.hpp */,
+				83C6A53A25A09B5200CC5817 /* TunelModelUtils.hpp */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -96,6 +114,8 @@
 			children = (
 				83B4852F252F72B3000A5B82 /* ShaderProgram.hpp */,
 				83B48536252F73C9000A5B82 /* Shader.hpp */,
+				8362A072257D92B800F4F7B6 /* Texture.hpp */,
+				830D99F42583CB8500F82CB6 /* Lights.hpp */,
 			);
 			path = Shader;
 			sourceTree = "<group>";
@@ -143,6 +163,7 @@
 		83D774C62524D82600A47BA3 /* OpenGL MidTermAssignment */ = {
 			isa = PBXGroup;
 			children = (
+				83A21B2D2581579800DE69C5 /* Boids */,
 				83B6A9E3255C227F00C316AB /* Transformation */,
 				83FBCFC62547408900E57566 /* Control */,
 				83E86367253DD406006B6066 /* res */,
@@ -236,6 +257,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83789BFA2560423300B6FBC2 /* Animation.cpp in Sources */,
+				83A21B322581695500DE69C5 /* BoidManager.cpp in Sources */,
 				83B6A9EE255C230200C316AB /* CGUtils.cpp in Sources */,
 				83B6A9EC255C22FD00C316AB /* ControlsManager.cpp in Sources */,
 				83B6A9EA255C22E800C316AB /* main.cpp in Sources */,

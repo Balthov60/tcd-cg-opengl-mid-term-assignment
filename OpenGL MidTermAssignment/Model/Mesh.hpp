@@ -35,7 +35,8 @@ public:
     Mesh(MeshData data) : data(data) {
         vertexBuffers.push_back(VertexBuffer(data.vertices));
         vertexBuffers.push_back(VertexBuffer(data.normals));
-        
+        vertexBuffers.push_back(VertexBuffer(data.textureCoords));
+
         vertexArray = new VertexArray(vertexBuffers);
     }
     

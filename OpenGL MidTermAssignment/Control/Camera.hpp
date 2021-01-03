@@ -29,7 +29,12 @@ public:
     // Used for Projection
     GLfloat fov;
     vec3 position;
-
+    
+    // Camera Vectors
+    vec3 front;
+    vec3 right;
+    vec3 up;
+    
     Camera(vec3 position = DEFAULT_POSITION, vec3 world_up = DEFAULT_UP, GLfloat yaw = DEFAULT_YAW, GLfloat pitch = DEFAULT_PITCH)
     : front(DEFAULT_FRONT), position(position), worldUp(world_up), up(world_up), yaw(yaw), pitch(pitch),
       movementSpeed(DEFAULT_SPEED), mouseSensitivity(DEFAULT_SENSITIVTY), fov(DEFAULT_FOV)
@@ -102,11 +107,7 @@ public:
 private:
     // Camera Configuration
     vec3 worldUp;
-
-    // Camera Vectors
-    vec3 front;
-    vec3 right;
-    vec3 up;
+    
     // Camera Angles
     GLfloat yaw;
     GLfloat pitch;

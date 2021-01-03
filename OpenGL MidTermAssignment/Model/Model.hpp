@@ -7,16 +7,19 @@
 
 #pragma once
 
+#include "Mesh.hpp"
+#include "CGUtils.hpp"
+
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include "Mesh.hpp"
-#include "CGUtils.hpp"
-
 class Model
 {
 public:
+    
+    Material material;
+    Texture * texture = NULL;
     
     Model(string path) {
         this->loadModel(MODEL_FOLDER_PATH + path);
@@ -25,6 +28,7 @@ public:
     void draw(ShaderProgram shaderProgram, Transformation transform)
     {
         shaderProgram.setupTransformMatrix(transform);
+        shaderProgram.setupMaterialAndTexture(material, texture);
         
         for (int i = 0; i < meshes.size(); i++) {
             this->meshes[i]->draw(shaderProgram);
@@ -35,6 +39,7 @@ public:
         for (int i = 0; i < meshes.size(); i++) {
             delete this->meshes[i];
         }
+        delete texture;
     }
     
 private:
@@ -83,6 +88,7 @@ private:
             if (aiMesh->HasTextureCoords(0)) {
                 const aiVector3D* vt = &(aiMesh->mTextureCoords[0][v_i]);
                 meshData.textureCoords.push_back(vec2(vt->x, vt->y));
+                printf("test : %f %f \n", vt->x, vt->y);
             }
             if (aiMesh->HasTangentsAndBitangents()) {
                 /* You can extract tangents and bitangents here              */

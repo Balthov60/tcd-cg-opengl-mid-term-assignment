@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <asset>
+    <contributor>
+      <author>Blender User</author>
+      <authoring_tool>Blender 2.90.1 commit date:2020-09-23, commit time:06:43, hash:3e85bb34d0d7</authoring_tool>
+    </contributor>
+    <created>2021-01-02T15:31:59</created>
+    <modified>2021-01-02T15:31:59</modified>
+    <unit name="meter" meter="1"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_effects>
+    <effect id="metalrust_001-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <lambert>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <diffuse>
+              <color sid="diffuse">0.3843747 0.3762719 0.3658963 1</color>
+            </diffuse>
+          </lambert>
+        </technique>
+      </profile_COMMON>
+    </effect>
+    <effect id="BlackMousseCable_001-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <lambert>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <diffuse>
+              <color sid="diffuse">0.002063449 0.002063449 0.002063449 1</color>
+            </diffuse>
+            <reflectivity>
+              <float sid="specular">0.05084746</float>
+            </reflectivity>
+          </lambert>
+        </technique>
+      </profile_COMMON>
+    </effect>
+    <effect id="Glassdoor_001-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <lambert>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <diffuse>
+              <color sid="diffuse">0.8 0.8 0.8 1</color>
+            </diffuse>
+            <reflectivity>
+              <float sid="specular">0.5</float>
+            </reflectivity>
+          </lambert>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_images/>
+  <library_materials>
+    <material id="metalrust_001-material" name="metalrust.001">
+      <instance_effect url="#metalrust_001-effect"/>
+    </material>
+    <material id="BlackMousseCable_001-material" name="BlackMousseCable.001">
+      <instance_effect url="#BlackMousseCable_001-effect"/>
+    </material>
+    <material id="Glassdoor_001-material" name="Glassdoor.001">
+      <instance_effect url="#Glassdoor_001-effect"/>
+    </material>
+  </library_materials>
+  <library_geometries>
+    <geometry id="Cube_002-mesh" name="Cube.002">
+      <mesh>
+        <source id="Cube_002-mesh-positions">
+          <float_array id="Cube_002-mesh-positions-array" count="24">-145.0541 -416.7282 0.5341176 -145.0541 425.5687 0.5341176 -51.39622 -416.7282 0.5341176 -51.39623 425.5687 0.5341176 42.26171 -416.7282 0.5341176 135.9196 -416.7282 0.5341176 42.26171 425.5687 0.5341176 135.9196 425.5687 0.5341176</float_array>
+          <technique_common>
+            <accessor source="#Cube_002-mesh-positions-array" count="8" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Cube_002-mesh-normals">
+          <float_array id="Cube_002-mesh-normals-array" count="3">0 0 1</float_array>
+          <technique_common>
+            <accessor source="#Cube_002-mesh-normals-array" count="1" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Cube_002-mesh-map-0">
+          <float_array id="Cube_002-mesh-map-0-array" count="36">-0.6205325 8.067841 -2.628765 -7.067841 -0.6205311 -7.067841 1.387701 8.067841 -0.6205311 -7.067841 1.387702 -7.067841 3.395934 8.067841 1.387702 -7.067841 3.395934 -7.067841 -0.6205325 8.067841 -2.628765 8.067841 -2.628765 -7.067841 1.387701 8.067841 -0.6205325 8.067841 -0.6205311 -7.067841 3.395934 8.067841 1.387701 8.067841 1.387702 -7.067841</float_array>
+          <technique_common>
+            <accessor source="#Cube_002-mesh-map-0-array" count="18" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Cube_002-mesh-vertices">
+          <input semantic="POSITION" source="#Cube_002-mesh-positions"/>
+        </vertices>
+        <triangles material="metalrust_001-material" count="6">
+          <input semantic="VERTEX" source="#Cube_002-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Cube_002-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#Cube_002-mesh-map-0" offset="2" set="0"/>
+          <p>3 0 0 0 0 1 2 0 2 6 0 3 2 0 4 4 0 5 7 0 6 4 0 7 5 0 8 3 0 9 1 0 10 0 0 11 6 0 12 3 0 13 2 0 14 7 0 15 6 0 16 4 0 17</p>
+        </triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_visual_scenes>
+    <visual_scene id="Scene" name="Scene">
+      <node id="Tunel_004" name="Tunel.004" type="NODE">
+        <matrix sid="transform">0.07592213 0 0 0 0 0.07592213 0 0 0 0 0.07592213 0 0 0 0 1</matrix>
+        <instance_geometry url="#Cube_002-mesh" name="Tunel.004">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="metalrust_001-material" target="#metalrust_001-material">
+                <bind_vertex_input semantic="UVMap" input_semantic="TEXCOORD" input_set="0"/>
+              </instance_material>
+              <instance_material symbol="BlackMousseCable_001-material" target="#BlackMousseCable_001-material">
+                <bind_vertex_input semantic="UVMap" input_semantic="TEXCOORD" input_set="0"/>
+              </instance_material>
+              <instance_material symbol="Glassdoor_001-material" target="#Glassdoor_001-material">
+                <bind_vertex_input semantic="UVMap" input_semantic="TEXCOORD" input_set="0"/>
+              </instance_material>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#Scene"/>
+  </scene>
+</COLLADA>

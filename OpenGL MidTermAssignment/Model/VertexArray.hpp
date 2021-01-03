@@ -30,7 +30,9 @@ public:
             glBindVertexArray(array);
             
             glEnableVertexAttribArray(i);
-            glVertexAttribPointer(i, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+            int size = 3;
+            if (i == 2) size = 2;
+            glVertexAttribPointer(i, size, GL_FLOAT, GL_FALSE, 0, NULL);
             glBindVertexArray(0);
         }
     }
@@ -43,12 +45,16 @@ public:
         
         GLuint positionID = glGetAttribLocation(program.program, "position");
         GLuint colorID = glGetAttribLocation(program.program, "color");
+        GLuint texId = glGetAttribLocation(program.program, "texCoords");
 
         glEnableVertexAttribArray(positionID);
         glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, 0, 0);
         
         glEnableVertexAttribArray(colorID);
         glVertexAttribPointer(colorID, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(verticesQty * VERTICE_SIZE));
+        
+        glEnableVertexAttribArray(texId);
+        glVertexAttribPointer(texId, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(verticesQty * VERTICE_SIZE + verticesQty * COLOR_SIZE));
         
         glBindVertexArray(0);
     }

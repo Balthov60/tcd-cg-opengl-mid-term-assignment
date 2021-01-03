@@ -6,7 +6,6 @@
 //
 #pragma once
 #include "CGUtils.hpp"
-#include "Camera.hpp"
 
 class ControlsManager
 {
@@ -15,6 +14,7 @@ public:
     static float deltaTime;
 
     static bool isKeysPressed[1024];
+    static int keyTimePressed[1024];
     
     static GLfloat lastX;
     static GLfloat lastY;
@@ -45,18 +45,12 @@ public:
     // MERGE with keyboard listener ?
     static void HandleCameraMovements();
     
+    static bool keyPressedFirstTime(int key);
+    
 private:
     
     static GLfloat lastFrame;
     static bool initMouse;
     
-    static void updateKeysPressed(int key, int action)
-    {
-        if (action == GLFW_PRESS) {
-            isKeysPressed[key] = true;
-        }
-        else if (action == GLFW_RELEASE) {
-            isKeysPressed[key] = false;
-        }
-    }
+    static void updateKeysPressed(int key, int action);
 };

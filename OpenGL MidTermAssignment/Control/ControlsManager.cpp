@@ -12,6 +12,8 @@ GLfloat ControlsManager::lastFrame = 0;
 GLfloat ControlsManager::deltaTime = 0;
 
 bool ControlsManager::isKeysPressed[];
+int ControlsManager::keyTimePressed[1024];
+
 
 bool ControlsManager::initMouse = true;
 GLfloat ControlsManager::lastX;
@@ -60,22 +62,27 @@ void ControlsManager::HandleCameraMovements()
     if (ControlsManager::isKeysPressed[GLFW_KEY_SPACE]) {
         camera->processTranslationMovement(UP, deltaTime);
     }
+}
 
-    // temp
-    if (ControlsManager::isKeysPressed[GLFW_KEY_T]) {
-        camera->fov += 0.5f * deltaTime;
+void ControlsManager::updateKeysPressed(int key, int action)
+{
+    if (action == GLFW_PRESS) {
+        // printf("Key pressed !");
+        isKeysPressed[key] = true;
+        keyTimePressed[key]++;
+    }
+    else if (action == GLFW_RELEASE) {
+        // printf("Key released !");
+        isKeysPressed[key] = false;
+        keyTimePressed[key] = 0;
+    }
+    else {
+        // printf("Key hold !");
+        isKeysPressed[key] = true;
+        keyTimePressed[key]++;
+    }
+}
 
-    }
-    else if (ControlsManager::isKeysPressed[GLFW_KEY_G]) {
-        camera->fov -= 0.5f * deltaTime;
-
-    }
-    
-    if (ControlsManager::isKeysPressed[GLFW_KEY_H]) {
-        camera->processRotationMovement(300.0* deltaTime, 0.0);
-
-    }
-    else if (ControlsManager::isKeysPressed[GLFW_KEY_F]) {
-        camera->processRotationMovement(-300.0* deltaTime, 0.0);
-    }
+bool ControlsManager::keyPressedFirstTime(int key) {
+    return isKeysPressed[key] && keyTimePressed[key] == 1;
 }

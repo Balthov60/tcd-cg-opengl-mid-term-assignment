@@ -48,14 +48,38 @@ void initModels() {
         return;
     }
     spiderBody = new Model("spider/spider_body.dae");
-
+    Material blackRubber1 = Material(vec3(0.02, 0.02, 0.02), vec3(0.01, 0.01, 0.01), vec3(0.4, 0.4, 0.4), 0.078125);
+    Material blackRubber = Material(vec3(0.05375, 0.05, 0.06625), vec3(0.18275, 0.17, 0.22525), vec3(0.332741, 0.328634, 0.346435), 0.078125); // Obsi
+    
+    Material bodyMaterial = Material(vec3(0.0215, 0.1745, 0.0215), vec3(0.07568, 0.61424, 0.07568), vec3(0.633, 0.727811, 0.633), 0.6);
+    spiderBody->material = blackRubber;
+    
     spiderLeftUpLeg = new Model("spider/spider_left_leg_up.dae");
     spiderLeftMiddleLeg = new Model("spider/spider_left_leg_middle.dae");
     spiderLeftDownLeg = new Model("spider/spider_left_leg_down.dae");
     
+    Material leftLegMaterial = Material(vec3(0.02, 0.02, 0.02), vec3(0.01, 0.01, 0.01), vec3(0.4, 0.4, 0.4), 0.078125);
+    spiderLeftUpLeg->material = blackRubber;
+    spiderLeftMiddleLeg->material = blackRubber;
+    spiderLeftDownLeg->material = blackRubber;
+    
     spiderRightUpLeg = new Model("spider/spider_right_leg_up.dae");
     spiderRightMiddleLeg = new Model("spider/spider_right_leg_middle.dae");
     spiderRightDownLeg = new Model("spider/spider_right_leg_down.dae");
+    
+    Material rightLegMaterial = Material(vec3(0.19125, 0.0735, 0.0225), vec3(0.7038, 0.27048, 0.0828), vec3(0.256777, 0.137622, 0.086014), 0.1);
+    spiderRightUpLeg->material = blackRubber;
+    spiderRightMiddleLeg->material = blackRubber;
+    spiderRightDownLeg->material = blackRubber;
+    
+    /*
+     Texture test
+     */
+    
+    Texture * texture = new Texture("brique.jpg");
+    // spiderBody->texture = texture;
+    // spiderLeftUpLeg->texture = texture;
+
     
     modelLoaded = true;
 }

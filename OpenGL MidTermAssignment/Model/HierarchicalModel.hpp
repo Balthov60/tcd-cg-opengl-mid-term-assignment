@@ -16,6 +16,9 @@ public:
     vector<HierarchicalModel> childs;
     Animation * animation = NULL;
     
+    // base transform ignored if animation used
+    Transformation baseTransform;
+    
     HierarchicalModel(Model * model, Transformation transform): baseTransform(transform) {
         this->model = model;
     }
@@ -38,12 +41,10 @@ public:
         childs.push_back(child);
     }
     
-private:
     Model * model;
+
     
-    
-    // base transform ignored if animation used
-    Transformation baseTransform;
+private:
     
     // additionnal transform to use on animation
     Transformation additionnalTransform;
